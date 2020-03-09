@@ -65,7 +65,7 @@
 
 (defun geoip-bytes-to-bits (bytes)
   "Convert BYTES to bits."
-  (apply #'append (mapcar #'geoip-byte-to-bits bytes)))
+  (cl-mapcan #'geoip-byte-to-bits bytes))
 
 (defun geoip-bytes-to-signed (bytes)
   "Convert BYTES to signed int."
