@@ -30,6 +30,7 @@
 ;;; Code:
 
 (require 'cl-lib)
+(require 'subr-x)                       ; `string-join'
 
 (defvar geoip-node-count)
 (defvar geoip-record-size)
@@ -207,20 +208,53 @@ INITIAL-SIZE is last 5 bits of the control byte."
   "Convert ipv4 BYTES to ipv6 bytes."
   (concat (make-string 10 0) (unibyte-string #xFF #xFF) bytes))
 
-;; TODO: support ipv6
-(defun geoip-lookup (geoip-buffer ipv4)
-  "Lookup IPV4 with GEOIP-BUFFER."
+(defun geoip-string-pad-left (s len padding)
+  "If S is shorter than LEN, pad it with PADDING on the left."
+  (pcase (- len (length s))
+    ((and (pred (< 0)) diff) (concat (make-string diff padding) s))
+    (_ s)))
+
+(defun geoip-ipv6-to-bytes (ipv6)
+  "Convert IPV6 to bytes."
+  ;; Expand :: as :0:0:0: to make sure `ipv6' has 8 numbers
+  (let ((short (- 8 (length (split-string ipv6 "::?" t)))))
+    (when (> short 0)
+      (setq ipv6 (replace-regexp-in-string
+                  "::"
+                  (format ":%s:" (string-join (make-list short "0") ":"))
+                  ipv6))))
+  (apply #'unibyte-string
+         (cl-mapcan (lambda (s)
+                      (let ((s (geoip-string-pad-left s 4 ?0)))
+                        (list (string-to-number (substring s 0 2) 16)
+                              (string-to-number (substring s 2) 16))))
+                    (split-string ipv6 ":" t))))
+
+(defun geoip-parse-ip (ip version)
+  "Parse IP then convert to VERSION."
+  (let (this-version bytes)
+    (cond
+     ((string-match-p (rx (+ num) "." (+ num) "." (+ num) "." (+ num)) ip)
+      (setq this-version 4
+            bytes (geoip-ipv4-to-bytes ip)))
+     ((string-match-p (rx ":") ip)
+      (setq this-version 6
+            bytes (geoip-ipv6-to-bytes ip)))
+     (t (user-error "%s is either IPv4 nor IPv6 address")))
+    (pcase (list version this-version)
+      ('(4 4) bytes)
+      ('(6 6) bytes)
+      (`(6 4) (geoip-ipv4-bytes-to-ipv6-bytes bytes))
+      (`(4 6) (user-error "can't convert IPv6 into IPv4 address")))))
+
+(defun geoip-lookup (geoip-buffer ip)
+  "Lookup IP with GEOIP-BUFFER."
   (with-current-buffer geoip-buffer
     (catch 'finish
       (let ((node-size (/ (* 2 geoip-record-size) 8))
             (node-index 0))
-        (dolist (b
-                 (geoip-bytes-to-bits
-                  (funcall
-                   (pcase (assoc-default "ip_version" geoip-metadata)
-                     (6 #'geoip-ipv4-bytes-to-ipv6-bytes)
-                     (4 #'identity))
-                   (geoip-ipv4-to-bytes ipv4))))
+        (dolist (b (geoip-bytes-to-bits
+                    (geoip-parse-ip ip (assoc-default "ip_version" geoip-metadata))))
           (pcase (pcase b
                    (0 (car  (geoip-read-node node-size node-index)))
                    (1 (cadr (geoip-read-node node-size node-index))))
