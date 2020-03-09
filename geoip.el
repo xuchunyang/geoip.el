@@ -29,6 +29,8 @@
 
 ;;; Code:
 
+(require 'cl-lib)
+
 (defvar geoip-node-count)
 (defvar geoip-record-size)
 (defvar geoip-tree-size)
