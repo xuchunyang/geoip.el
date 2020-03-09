@@ -4,7 +4,7 @@
 
 ;; Author: Xu Chunyang
 ;; Homepage: https://github.com/xuchunyang/geoip.el
-;; Package-Requires: ((emacs "24.5"))
+;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: tools
 ;; Version: 0
 
