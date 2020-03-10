@@ -175,6 +175,7 @@ INITIAL-SIZE is last 5 bits of the control byte."
     (with-current-buffer buffer
       (set-buffer-multibyte nil)
       (insert-file-contents-literally path)
+      (read-only-mode)
       (goto-char (point-max))
       (search-backward "\xab\xcd\xefMaxMind.com")
       (goto-char (match-end 0))
