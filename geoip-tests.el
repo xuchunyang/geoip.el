@@ -48,12 +48,12 @@
   (with-current-buffer (geoip-new-buffer "GeoIP2-Anonymous-IP-Test.mmdb")
     ;; https://github.com/maxmind/MaxMind-DB/blob/master/source-data/GeoIP2-Anonymous-IP-Test.json#L9
     (should (equal (geoip-lookup (current-buffer) "1.124.213.1")
-                   '(("is_anonymous" . t)
-                     ("is_anonymous_vpn" . t)
-                     ("is_tor_exit_node" . t))))
+                   '((is_anonymous . t)
+                     (is_anonymous_vpn . t)
+                     (is_tor_exit_node . t))))
     (should (equal (geoip-lookup (current-buffer) "71.160.223.0")
-                   '(("is_anonymous" . t)
-                     ("is_hosting_provider" . t))))
+                   '((is_anonymous . t)
+                     (is_hosting_provider . t))))
     (kill-buffer (current-buffer))))
 
 (ert-deftest geoip-Country-Test ()

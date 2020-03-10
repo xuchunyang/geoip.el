@@ -144,7 +144,7 @@
         (5 (geoip-bytes-to-unsigned (geoip-read-bytes size)))
         (6 (geoip-bytes-to-unsigned (geoip-read-bytes size)))
         (7 (cl-loop repeat size
-                    collect (cons (geoip-read) (geoip-read)))))))))
+                    collect (cons (intern (geoip-read)) (geoip-read)))))))))
 
 (defun geoip-read-pointer (initial-size)
   "Read a pointer and return pointer value (that is, offset to data section).
@@ -179,8 +179,8 @@ INITIAL-SIZE is last 5 bits of the control byte."
       (search-backward "\xab\xcd\xefMaxMind.com")
       (goto-char (match-end 0))
       (setq-local geoip-metadata (geoip-read))
-      (setq-local geoip-node-count (assoc-default "node_count" geoip-metadata))
-      (setq-local geoip-record-size (assoc-default "record_size" geoip-metadata))
+      (setq-local geoip-node-count (alist-get 'node_count geoip-metadata))
+      (setq-local geoip-record-size (alist-get 'record_size geoip-metadata))
       (setq-local geoip-tree-size (* (/ (* geoip-record-size 2) 8) geoip-node-count)))
     buffer))
 
@@ -254,7 +254,7 @@ INITIAL-SIZE is last 5 bits of the control byte."
       (let ((node-size (/ (* 2 geoip-record-size) 8))
             (node-index 0))
         (dolist (b (geoip-bytes-to-bits
-                    (geoip-parse-ip ip (assoc-default "ip_version" geoip-metadata))))
+                    (geoip-parse-ip ip (alist-get 'ip_version geoip-metadata))))
           (pcase (pcase b
                    (0 (car  (geoip-read-node node-size node-index)))
                    (1 (cadr (geoip-read-node node-size node-index))))
