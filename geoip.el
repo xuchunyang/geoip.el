@@ -245,7 +245,7 @@ INITIAL-SIZE is last 5 bits of the control byte."
       ('(4 4) bytes)
       ('(6 6) bytes)
       (`(6 4) (geoip-ipv4-bytes-to-ipv6-bytes bytes))
-      (`(4 6) (user-error "can't convert IPv6 into IPv4 address")))))
+      (`(4 6) (user-error "Can't convert IPv6 into IPv4 address")))))
 
 (defun geoip-lookup (geoip-buffer ip)
   "Lookup IP with GEOIP-BUFFER."
