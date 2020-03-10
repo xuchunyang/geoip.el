@@ -25,42 +25,42 @@ lookups using `geoip-lookup`. For example,
 
 (geoip-lookup my-geoip-buffer "114.114.114.114")
 ;; =>
-(("continent"
-  ("code" . "AS")
-  ("geoname_id" . 6255147)
-  ("names"
-   ("de" . "Asien")
-   ("en" . "Asia")
-   ("es" . "Asia")
-   ("fr" . "Asie")
-   ("ja" . "アジア")
-   ("pt-BR" . "Ásia")
-   ("ru" . "Азия")
-   ("zh-CN" . "亚洲")))
- ("country"
-  ("geoname_id" . 1814991)
-  ("iso_code" . "CN")
-  ("names"
-   ("de" . "China")
-   ("en" . "China")
-   ("es" . "China")
-   ("fr" . "Chine")
-   ("ja" . "中国")
-   ("pt-BR" . "China")
-   ("ru" . "Китай")
-   ("zh-CN" . "中国")))
- ("registered_country"
-  ("geoname_id" . 1814991)
-  ("iso_code" . "CN")
-  ("names"
-   ("de" . "China")
-   ("en" . "China")
-   ("es" . "China")
-   ("fr" . "Chine")
-   ("ja" . "中国")
-   ("pt-BR" . "China")
-   ("ru" . "Китай")
-   ("zh-CN" . "中国"))))
+((continent
+  (code . "AS")
+  (geoname_id . 6255147)
+  (names
+   (de . "Asien")
+   (en . "Asia")
+   (es . "Asia")
+   (fr . "Asie")
+   (ja . "アジア")
+   (pt-BR . "Ásia")
+   (ru . "Азия")
+   (zh-CN . "亚洲")))
+ (country
+  (geoname_id . 1814991)
+  (iso_code . "CN")
+  (names
+   (de . "China")
+   (en . "China")
+   (es . "China")
+   (fr . "Chine")
+   (ja . "中国")
+   (pt-BR . "China")
+   (ru . "Китай")
+   (zh-CN . "中国")))
+ (registered_country
+  (geoname_id . 1814991)
+  (iso_code . "CN")
+  (names
+   (de . "China")
+   (en . "China")
+   (es . "China")
+   (fr . "Chine")
+   (ja . "中国")
+   (pt-BR . "China")
+   (ru . "Китай")
+   (zh-CN . "中国"))))
 ```
 
 ## API
