@@ -241,7 +241,7 @@ INITIAL-SIZE is last 5 bits of the control byte."
      ((string-match-p (rx ":") ip)
       (setq this-version 6
             bytes (geoip-ipv6-to-bytes ip)))
-     (t (user-error "%s is either IPv4 nor IPv6 address")))
+     (t (user-error "%s is either IPv4 nor IPv6 address" ip)))
     (pcase (list version this-version)
       ('(4 4) bytes)
       ('(6 6) bytes)
