@@ -1,4 +1,5 @@
 # geoip.el
+[![Melpa](https://melpa.org/packages/geoip-badge.svg)](https://melpa.org/#/geoip)
 
 ## Introduction
 
